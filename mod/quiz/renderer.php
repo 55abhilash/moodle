@@ -649,8 +649,7 @@ class mod_quiz_renderer extends plugin_renderer_base {
                         $attemptobj->get_question_number($slot) . $flag),
                         $attemptobj->get_question_status($slot, $displayoptions->correctness));
             } else {
-                $row = array($attemptobj->get_question_number($slot) . $flag,
-                                $attemptobj->get_question_status($slot, $displayoptions->correctness));
+                $row = array($slot . $flag, $attemptobj->get_question_status($slot, $displayoptions->correctness));
             }
             if ($markscolumn) {
                 $row[] = $attemptobj->get_question_mark($slot);

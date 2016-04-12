@@ -1135,15 +1135,6 @@ class quiz_attempt {
         }
     }
 
-    /**
-     * Get the displayed question number for a slot.
-     * @param int $slot the number used to identify this question within this attempt.
-     * @return string the displayed question number for the question in this slot.
-     *      For example '1', '2', '3' or 'i'.
-     */
-    public function get_question_number($slot) {
-        return $this->questionnumbers[$slot];
-    }
 
     /**
      * If the section heading, if any, that should come just before this slot.
@@ -1439,7 +1430,7 @@ class quiz_attempt {
             $displayoptions->readonly = true;
 
             return html_writer::div($placeholderqa->render($displayoptions,
-                    $this->get_question_number($this->get_original_slot($slot))),
+                    $this->get_original_slot($slot)),
                     'mod_quiz-blocked_question_warning');
         }
 
@@ -1458,7 +1449,7 @@ class quiz_attempt {
      */
     protected function render_question_helper($slot, $reviewing, $thispageurl, mod_quiz_renderer $renderer, $seq) {
         $originalslot = $this->get_original_slot($slot);
-        $number = $this->get_question_number($originalslot);
+        $number = $originalslot;
         $displayoptions = $this->get_display_options_with_edit_link($reviewing, $slot, $thispageurl);
 
         if ($slot != $originalslot) {
@@ -1555,8 +1546,7 @@ class quiz_attempt {
         $options = $this->get_display_options(true);
         $options->hide_all_feedback();
         $options->manualcomment = question_display_options::EDITABLE;
-        return $this->quba->render_question($slot, $options,
-                $this->get_question_number($slot));
+        return $this->quba->render_question($slot, $options, $slot);
     }
 
     /**
@@ -2134,7 +2124,7 @@ abstract class quiz_nav_panel_base {
 
             $button = new quiz_nav_question_button();
             $button->id          = 'quiznavbutton' . $slot;
-            $button->number      = $this->attemptobj->get_question_number($slot);
+            $button->number      = $slot;
             $button->stateclass  = $qa->get_state_class($showcorrectness);
             $button->navmethod   = $this->attemptobj->get_navigation_method();
             if (!$showcorrectness && $button->stateclass == 'notanswered') {
